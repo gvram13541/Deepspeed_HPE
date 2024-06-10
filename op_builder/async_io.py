@@ -20,7 +20,6 @@ class AsyncIOBuilder(OpBuilder):
         
         super().__init__(name=self.NAME)
         self.device_type=self._fetch_plugin_type()
-        self.plugin_manager = PluginManager()
         self.device_module = None
     
  
