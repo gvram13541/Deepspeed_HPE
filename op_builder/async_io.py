@@ -19,7 +19,6 @@ class AsyncIOBuilder(OpBuilder):
     def __init__(self):
         
         super().__init__(name=self.NAME)
-        self.device_type = "nvme" # unnecesary
         self.device_type=self._fetch_plugin_type()
         self.plugin_manager = PluginManager()
         self.device_module = None
@@ -41,12 +40,13 @@ class AsyncIOBuilder(OpBuilder):
     def sources(self):
         return [
             'csrc/aio/py_lib/py_ds_aio.cpp',
-            'csrc/aio/py_lib/py_ds_aio_trampoline.cpp'
+            'csrc/aio/py_lib/py_ds_aio_trampoline.cpp',
+            'csrc/aio/py_lib/trampoline.h'
         ]
 
     def load(self, verbose=True):
         op_module = super().load(verbose)
-        self.trampoline = op_module.DeepSpeedAIOTrampoline(self.device_type)
+        self.trampoline = op_module.Trampoline(self.device_type)
         return op_module
     
     def __getattr__(self, name):

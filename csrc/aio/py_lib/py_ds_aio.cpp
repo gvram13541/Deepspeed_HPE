@@ -13,18 +13,15 @@ PYBIND11_MODULE(py_ds_trampoline, m) {
         aio->load_device(device_type);
     }, "Load Device");
 
-    m.def("aio_read", [](const std::string& device_type) {
-        auto aio = std::make_shared<Trampoline>(device_type);
+    m.def("aio_read", [](std::shared_ptr<Trampoline> aio, torch::Tensor& buffer, const char* filename, const bool validate) {
         aio->aio_read(buffer, filename, validate);
     }, "DeepSpeed Asynchronous I/O Read");
 
-    m.def("aio_write", [](const std::string& device_type) {
-        auto aio = std::make_shared<Trampoline>(device_type);
+    m.def("aio_write", [](std::shared_ptr<Trampoline> aio, const torch::Tensor& buffer, const char* filename, const bool validate) {
         aio->aio_write(buffer, filename, validate);
     }, "DeepSpeed Asynchronous I/O Write");
 
-    m.def("deepspeed_memcpy", [](const std::string& device_type) {
-        auto aio = std::make_shared<Trampoline>(device_type);
+    m.def("deepspeed_memcpy", [](std::shared_ptr<Trampoline> aio, torch::Tensor& dest, const torch::Tensor& src) {
         aio->deepspeed_memcpy(dest, src);
     }, "DeepSpeed Memory Copy");
 
